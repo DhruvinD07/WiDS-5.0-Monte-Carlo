@@ -1,0 +1,9 @@
+*.tex
+.venv
+*.aux
+*.fls
+*.log
+*.out
+*.gz
+submissions/
+.venv/
