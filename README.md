@@ -62,6 +62,9 @@ Please submit your completed your python code by the end of the week. This will 
 
 Good luck, and don't hesitate to ask questions!
 
+#### **What did I do and learn**
+I did Numpy and Matplotlib tutorials and got used to writing code in Python and visualising data as arrays along with reading lectures on statistics. I built games such as Blackjack in python to understand how to modularize code and learning the steps that go towards building a small project such as that and how to plan the code. I also used LLMs to learn how to convert my code to a graphical interface along with actual displays of cards as I choose to hit or stay which is visually pleasing. 
+
 ### **Week 2: Monte Carlo in Geometry - Vectorization & Integration**
 
 **Objective:** This week we bridge the gap between "coding" and "scientific computing" and understand what Monte Carlo simulations are by getting our hands dirty. You will learn how to use random sampling to solve math problems (calculating areas and integrals) that are hard or impossible to solve analytically. You will also learn the most important rule of Python Data Science: **No For Loops.**
@@ -91,6 +94,8 @@ Another optional assignment regarding the application of Monte Carlo methods in 
 
 Submission will be via a Google Form. Make sure your convergence plots are visible in the notebook. Further instructions are available in assignment pdf.
 
+#### **What did I do and learn**
+I read and saw lectures based on higher dimensions and Monte Carlo estimations to understand this topic. I then implemented the code while trying to avoid loops to make the code faster for estimating pi or euler's number, and also how to calculate volume of a few basic shapes.
 ### **Week 3: Getting Started with Reinforcement Learning**
 
 Reinforcement Learning is an exciting field in AI and Machine Learning. It was mainly brought into spotlight by Google's Deep RL agents to play Atari Games in 2013, and then a further public milestone was their AlphaGo model to beat a professional human Go player.
