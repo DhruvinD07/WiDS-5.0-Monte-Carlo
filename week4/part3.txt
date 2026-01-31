@@ -1,0 +1,68 @@
+Part III: The Reality Check
+
+Question A: The Infinite Deck Assumption
+
+In many Reinforcement Learning formulations of Blackjack, including the one used in this project, the game is modeled with an infinite deck or with reshuffling after every round. This assumption simplifies the learning process but does not reflect how Blackjack is played in real casinos, where a shoe of 6–8 decks is used without reshuffling after each round. This difference affects the Markov property of the environment and the kind of strategies an agent can learn.
+
+A1. Why the environment is no longer Markovian
+
+An environment is Markovian if the future evolution of the system depends only on the current state and not on the past history. In our implementation, the state is defined using only the player’s hand value and the dealer’s visible card, i.e., (PlayerSum, DealerCard), sometimes extended with a usable ace indicator.
+
+This state definition works only under the assumption of an infinite deck. In a finite-deck Blackjack game, the probability of drawing future cards depends on which cards have already been drawn from the shoe. For example, if many high-value cards (10, J, Q, K) have already appeared, the likelihood of drawing another high card decreases. Similarly, if many low cards have been removed, the remaining deck becomes more favorable for the player.
+
+As a result, two identical states such as (PlayerSum = 16, DealerCard = 10) can lead to different future outcomes depending on the unseen deck composition. Since this information is not included in the state, the transition probabilities depend on past events and not solely on the current state. Therefore, the environment is no longer Markovian when defined only by (PlayerSum, DealerCard) in a finite-deck setting.
+
+A2. Modifying the state to enable Card Counting
+
+To enable an RL agent to learn card counting behavior, the state must include information that captures the changing deck composition. One practical approach is to augment the state with a running count similar to those used in human card-counting strategies.
+
+A modified state representation could be:
+(PlayerSum, DealerCard, UsableAce, RunningCount)
+
+The running count summarizes whether more high or low cards have been removed from the deck and provides information about how favorable the remaining cards are. This allows the agent to adjust its decisions based on deck bias.
+
+Another approach would be to include the full remaining deck composition, such as the count of each card rank still available. While this would fully restore the Markov property, it would lead to a very large state space and be computationally impractical.
+
+A reasonable compromise is to discretize the running count into a small number of buckets (for example, low, neutral, high). This gives the agent enough information to learn card-counting strategies while keeping the state space manageable.
+
+A3. Trade-off: Effect on convergence speed
+
+Expanding the state space introduces a clear trade-off between expressiveness and learning speed. As the state space becomes larger, the agent must explore many more states, which reduces the number of visits to each individual state.
+
+This leads to higher variance in value estimates and slower convergence. More episodes are required for the agent to learn reliable value estimates, and simple tabular methods may become inefficient. In practice, larger state spaces often require function approximation or state abstraction techniques to achieve reasonable convergence times.
+
+Thus, while expanding the state space allows for more realistic modeling and better strategies, it significantly increases the computational cost of learning.
+
+Question B: First-Visit vs Every-Visit Monte Carlo
+
+Consider the episode:
+A → B → A → Terminate
+
+With rewards:
+A → B : +1  
+B → A : −1  
+A → Terminate : +10
+
+To compute the return, we sum all future rewards from the point where the state is visited.
+
+For the first visit to state A:
+G(A₁) = +1 − 1 + 10 = +10
+
+For the second visit to state A:
+G(A₂) = +10
+
+B1. First-Visit Monte Carlo
+
+In First-Visit Monte Carlo, only the return following the first occurrence of a state in an episode is used. Therefore, only the first visit to state A is considered.
+
+Return for A using First-Visit Monte Carlo:
+G(A) = +10
+
+B2. Every-Visit Monte Carlo
+
+In Every-Visit Monte Carlo, the return is computed for every occurrence of the state within the episode. State A appears twice, so both returns are used.
+
+Return for A using Every-Visit Monte Carlo:
+G(A) = average of (+10, +10) = +10
+
+Although both methods produce the same return in this example, they differ in general in terms of variance and update frequency. First-Visit Monte Carlo updates once per episode, while Every-Visit Monte Carlo updates at every occurrence of the state.
